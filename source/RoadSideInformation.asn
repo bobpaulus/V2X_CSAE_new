@@ -1,0 +1,13 @@
+RoadSideInformation DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+
+EXPORTS RoadSideInformation;
+IMPORTS ;
+	RoadSideInformation ::=SEQUENCE{
+		
+	}
+	
+	
+	
+	
+	
+END

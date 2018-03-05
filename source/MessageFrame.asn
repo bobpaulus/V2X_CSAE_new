@@ -1,0 +1,17 @@
+MessageFrame DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+IMPORTS BasicSafetyMessage, BasicSafetyMessage FROM BasicSafetyMessage
+        SPAT, SPAT FROM SPAT
+        	RoadsideSafetyMessage, RoadsideSafetyMessage FROM RoadsideSafetyMessage
+        	MapData, MapData FROM MapData
+        	RoadSideInformation, RoadSideInformation FROM RoadSideInformation;
+	
+	MessageFrame ::= CHOICE {
+		bsmFrame BasicSafetyMessage,
+		mapFrame MapData,
+		rsmFrame RoadsideSafetyMessage,
+		spatFrame SPAT,
+		rsiFrame RoadSideInformation,
+		...
+}
+
+END

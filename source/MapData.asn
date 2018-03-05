@@ -1,0 +1,12 @@
+MapData DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+
+EXPORTS MapData;
+IMPORTS ;
+	MapData ::=SEQUENCE{
+		
+	}
+	
+	
+	
+	
+END

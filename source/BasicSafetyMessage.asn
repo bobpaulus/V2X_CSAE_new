@@ -1,0 +1,7 @@
+BasicSafetyMessage DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+EXPORTS BasicSafetyMessage;
+	BasicSafetyMessage::=SEQUENCE{
+		
+	}
+	
+END

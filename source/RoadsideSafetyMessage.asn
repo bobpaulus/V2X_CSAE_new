@@ -1,0 +1,13 @@
+RoadsideSafetyMessage DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+
+EXPORTS RoadsideSafetyMessage;
+IMPORTS ;
+	RoadsideSafetyMessage::=SEQUENCE{
+	}
+	
+	
+	
+	
+	
+	
+END
