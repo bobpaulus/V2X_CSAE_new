@@ -1,4 +1,4 @@
-MessageFrame DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+MessageFSrame DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 IMPORTS BasicSafetyMessage, BasicSafetyMessage FROM BasicSafetyMessage
         SPAT, SPAT FROM SPAT
         	RoadsideSafetyMessage, RoadsideSafetyMessage FROM RoadsideSafetyMessage

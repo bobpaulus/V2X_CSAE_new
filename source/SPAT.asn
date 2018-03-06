@@ -1,10 +1,14 @@
 SPAT DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 
 EXPORTS SPAT;
-IMPORTS ;
+IMPORTS MsgCount, MsgCount FROM DataElements
+MinuteOfTheYear, MinuteOfTheYear FROM DataElements
+DescriptiveName, DescriptiveName FROM DataElements
+IntersectionStateList, IntersectionStateList FROM DataFrame;
 	SPAT ::=SEQUENCE{
 		msgCnt MsgCount,
-		timeStamp MinuteOfTheYear OPTIONAL, name DescriptiveName OPTIONAL,
+		timeStamp MinuteOfTheYear OPTIONAL, 
+		name DescriptiveName OPTIONAL,
 		-- human readable name for this collection 
 		-- to be used only in debug mode
 		intersections IntersectionStateList,

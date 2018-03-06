@@ -1,7 +1,9 @@
 MapData DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 
 EXPORTS MapData;
-IMPORTS ;
+IMPORTS MsgCount, MsgCount FROM DataElements
+		MinuteOfTheYear, MinuteOfTheYear FROM DataElements
+		NodeList, NodeList FROM DataFrame;
 	MapData ::=SEQUENCE{
 		msgCnt MsgCount,
 		timeStamp MinuteOfTheYear OPTIONAL,

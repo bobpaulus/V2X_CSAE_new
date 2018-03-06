@@ -1,6 +1,85 @@
 DataElements DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 
-EXPORTS ;
+EXPORTS Acceleration,
+		AlertType,
+		AllowedManeuvers,
+		AntiLockBrakeStatus,
+		AuxiliaryBrakeStatus,
+		BasicVehicleClass,
+		BrakeAppliedStatus,
+		BrakeBoostApplied,
+		BrakePedalStatus,
+		CoarseHeading,
+		Confidence,
+		DDay,
+		DescriptiveName,
+		DHour,
+		DMinute,
+		DMonth,
+		DSecond,
+		DTimeOffset, 
+		DYear, 
+		Elevation,
+		ElevationConfidence, 
+		ExteriorLights,
+		GNSSstatus,
+		Heading,
+		HeadingConfidence,
+		IntersectionStatusObject,
+		LaneAttributes-Barrier,
+		LaneAttributes-Bike,
+		LaneAttributes-Crosswalk,
+		LaneAttributes-Parking,
+		LaneAttributes-Sidewalk,
+		LaneAttributes-Striping,
+		LaneAttributes-TrackedVehicle,
+		LaneAttributes-Vehicle,
+		LaneID,
+		LaneSharing,
+		LaneWidth,
+		Latitude,
+		LightState,
+		Longitude,
+		MinuteOfTheYear,
+		MsgCount,
+		NodeID,
+		OffsetLL-B12,
+		OffsetLL-B14,
+		OffsetLL-B16,
+		OffsetLL-B18,
+		OffsetLL-B22,
+		OffsetLL-B24,
+		ParticipantType,
+		PhaseID,
+		PositionConfidence,
+		Priority,
+		Radius,
+		RadiusOfCurvature,
+		RoadRegulatorID,
+		SourceType,
+		Speed,
+		SpeedConfidence,
+		SpeedLimitType,
+		StabilityControlStatus,
+		SteeringWheelAngle,
+		SteeringWheelAngleConfidence,
+		TimeConfidence,
+		TimeMark,
+		TimeOffset,
+		TractionControlStatus,
+		TransmissionState,
+		VehicleEventFlags,
+		VehicleHeight,
+		VehicleLength,
+		VehicleWidth,
+		VerticalAcceleration,
+		VertOffset-B07,
+		VertOffset-B08,
+		VertOffset-B09,
+		VertOffset-B10,
+		VertOffset-B11,
+		VertOffset-B12,
+		YawRate;
 IMPORTS ;
 	Acceleration ::= INTEGER (-2000..2001)
 	-- LSB units are 0.01 m/s^2
@@ -53,25 +132,833 @@ IMPORTS ;
 		-- proceed past stop line with caution 
 		reserved1 (11)
 		-- used to align to 12 Bit Field
-		} (SIZE(12))	
+	} (SIZE(12))
+	
+	AntiLockBrakeStatus ::= ENUMERATED {
+		unavailable (0), -- B'00 Vehicle Not Equipped with ABS Brakes 
+		-- or ABS Brakes status is unavailable
+		off (1), -- B'01 Vehicle's ABS are Off
+		on (2), -- B'10 Vehicle's ABS are On ( but not Engaged )
+		engaged (3) -- B'11 Vehicle's ABS control is Engaged on any wheel
+	}
+	
+	AuxiliaryBrakeStatus ::= ENUMERATED {
+		unavailable (0), -- B'00 Vehicle Not Equipped with Aux Brakes 
+		-- or Aux Brakes status is unavailable
+		off (1), -- B'01 Vehicle's Aux Brakes are Off
+		on (2), --B'10 Vehicle's Aux Brakes are On(Engaged)
+		reserved(3) --B'11
+	}
+	
+	BasicVehicleClass ::=INTEGER(0..255)
+	unknownVehicleClass BasicVehicleClass ::=0
+	--Not Equipped, Not known or unavailable
+	specialVehicleClass BasicVehicleClass ::=1
+	--Special use
+	--
+	--Basic Passenger Motor Vehicle Types
+	--
+	passenger-Vehicle-TypeUnknown BasicVehicleClass ::=10--default type
+	passenger-Vehicle-TypeOther BasicVehicleClass ::=11
+	--various fuel types are handled in another element
+	--
+	--Light Trucks, Pickup, Van, Panel
+	--
+	lightTruck-Vehicle-TypeUnknown BasicVehicleClass ::=20--default type
+	lightTruck-Vehicle-TypeOther BasicVehicleClass ::=21
+	--
+	--Trucks, Various axle type, includes HPMS items
+	--
+	truck-Vehicle-TypeUnknown BasicVehicleClass ::=25--default type
+	truck-Vehicle-TypeOther BasicVehicleClass ::=26
+	truck-axleCnt2 BasicVehicleClass ::=27--Two axle, six tire single units
+	truck-axleCnt3 BasicVehicleClass ::=28--Three axle, single units
+	truck-axleCnt4 BasicVehicleClass ::=29--Four or more axle, single unit
+	truck-axleCnt4Trailer BasicVehicleClass ::=30--Four or less axle, single trailer
+	truck-axleCnt5Trailer BasicVehicleClass ::=31--Five or less axle, single trailer
+	truck-axleCnt6Trailer BasicVehicleClass ::=32--Six or more axle, single trailer
+	truck-axleCnt5MultiTrailer BasicVehicleClass ::=33--Five or less axle, multi-trailer
+	truck-axleCnt6MultiTrailer BasicVehicleClass ::=34--Six axle, multi-trailer
+	truck-axleCnt7MultiTrailer BasicVehicleClass ::=35--Seven or more axle, multi-trailer
+	--
+	--Motorcycle Types
+	--
+	motorcycle-TypeUnknown BasicVehicleClass ::=40--default type
+	motorcycle-TypeOther BasicVehicleClass ::=41
+	motorcycle-Cruiser-Standard BasicVehicleClass ::=42
+	motorcycle-SportUnclad BasicVehicleClass ::=43
+	motorcycle-SportTouring BasicVehicleClass ::=44
+	motorcycle-SuperSport BasicVehicleClass ::=45
+	motorcycle-Touring BasicVehicleClass ::=46
+	motorcycle-Trike BasicVehicleClass ::=47
+	motorcycle-wPassengers BasicVehicleClass ::=48--type not stated
+	--
+	--Transit Types
+	--
+	transit-TypeUnknown BasicVehicleClass ::=50--default type
+	transit-TypeOther BasicVehicleClass ::=51
+	transit-BRT BasicVehicleClass ::=52
+	transit-ExpressBus BasicVehicleClass ::=53
+	transit-LocalBus BasicVehicleClass ::=54
+	transit-SchoolBus BasicVehicleClass ::=55
+	transit-FixedGuieway BasicVehicleClass ::=56
+	transit-Paratransit BasicVehicleClass ::=57
+	transit-Patatransit-Ambulance BasicVehicleClass ::=58
+	--
+	--Emergency Vehicle Types
+	--
+	emergency-TypeUnknown BasicVehicleClass ::=60--default type
+	emergency-TypePther BasicVehicleClass ::=61--includes federal users
+	emergency-Fire-Light-Vehicle BasicVehicleClass ::=62
+	emergency-Fire-Heavy-Vehicle BasicVehicleClass ::=63
+	emergency-Fire-Paramedic-Vehicle BasicVehicleClass ::=64
+	emergency-Fire-Ambulance-Vehicle BasicVehicleClass ::=65
+	emergency-Police-Light-Vehicle BasicVehicleClass ::=66
+	emergency-Police-Heavy-Vehicle BasicVehicleClass ::=67
+	emergency-Other-Responder BasicVehicleClass ::=68
+	emergency-Other-Ambulance BasicVehicleClass ::=69
+	--
+	--Other V2X Equipped Travelers
+	--
+	otherTraveler-TypeUnknown BasicVehicleClass ::=80--default type
+	otherTraveler-TypeOther BasicVehicleClass ::=81
+	otherTraveler-Pedestrian BasicVehicleClass ::=82
+	otherTraveler-Visually-Disabled BasicVehicleClass ::=83
+	otherTraveler-Physically-Disabled BasicVehicleClass ::=84
+	otherTraveler-Bicycle BasicVehicleClass ::=85
+	otherTraveler-Vulnerable-Roadworker BasicVehicleClass ::=86
+	--
+	--Other V2X Equipped DeviceTypes
+	infrastructure-TypeUnknown BasicVehicleClass ::=90--default type
+	infrastructure-Fixed BasicVehicleClass ::=91
+	infrastructure-Movable BasicVehicleClass ::=92
+	equipped-CargoTrailer BasicVehicleClass ::=93
+	
+	BrakeAppliedStatus ::= BIT STRING {
+		unavailable (0), -- When set, the brake applied status is unavailable
+		leftFront (1), -- Left Front Active
+		leftRear (2), -- Left Rear Active
+		rightFront (3), -- Right Front Active
+		rightRear (4) -- Right Rear Active
+	} (SIZE (5))
 		
-		AntiLockBrakeStatus ::= ENUMERATED {
-			unavailable (0), -- B'00 Vehicle Not Equipped with ABS Brakes 
-			-- or ABS Brakes status is unavailable
-			off (1), -- B'01 Vehicle's ABS are Off
-			on (2), -- B'10 Vehicle's ABS are On ( but not Engaged )
-			engaged (3) -- B'11 Vehicle's ABS control is Engaged on any wheel
-		}
+	BrakeBoostApplied ::= ENUMERATED {
+		unavailable (0), -- Vehicle not equipped with brake boost
+		-- or brake boost data is unavailable
+		off (1), -- Vehicle's brake boost is off
+		on (2) -- Vehicle's brake boost is on (applied)
+	}	
+	
+	BrakePedalStatus ::= ENUMERATED {
+		unavailable (0), -- Vehicle brake pedal detector is unavailable
+		off (1), -- Vehicle's brake padel is not pressed
+		on (2) -- Vehicle's brake padel is pressed
+	}
+	
+	CoarseHeading ::= INTEGER (0..240)
+	-- Where the LSB is in units of 1.5 degrees
+	-- over a range of 0 ～ 358.5 degrees
+	-- the value 240 shall be used for unavailable
+	
+	Confidence ::= INTEGER (0..200)
+	-- LSB units of 0.5 percent
+	
+	DDay ::= INTEGER (0..31)
+	-- units of days
+	
+	DescriptiveName ::= IA5String (SIZE(1..63))
+	
+	DHour ::= INTEGER (0..31)
+	-- units of hours
+	
+	DMinute ::= INTEGER (0..60)
+	-- units of minutes
+	
+    DMonth ::= INTEGER (0..12)
+	-- units of months
+    
+    DSecond ::= INTEGER (0..65535)
+	-- units of milliseconds
+    
+    DTimeOffset ::= INTEGER(-840..840)
+    --units of minutes from UTC time
+    
+    DYear ::= INTEGER(0..4095)
+    --units of years
+    
+    Elevation ::= INTEGER(-4096..61439)
+    --In units of 10 cm steps above or below the reference ellipsoid
+    --Providing a range of -409.5 to +6143.9 meters
+    --The value -4096 shall be used when Unknown is to be sent
+    
+    ElevationConfidence ::= ENUMERATED{
+    	unavailable(0),--B'0000 Not Equipped or unavailable
+    	elev-500-00(1),--B'0001(500m)
+    	elev-200-00(2),--B'0010(200m)
+    	elev-100-00(3),--B'0011(100m)
+    	elev-050-00(4),--B'0100(50m)
+    	elev-020-00(5),--B'0101(20m)
+    	elev-010-00(6),--B'0110(10m)
+    	elev-005-00(7),--B'0111(5m)
+    	elev-002-00(8),--B'1000(2m)
+    	elev-001-00(9),--B'1001(1m)
+    	elev-000-50(10),--B'1010(50cm)
+    	elev-000-20(11),--B'1011(20cm)
+    	elev-000-10(12),--B'1100(10cm)
+    	elev-000-05(13),--B'1101(5cm)
+    	elev-000-02(14),--B'1110(2cm)
+    	elev-000-01(15)--B'1111(1cm)
+    }--Encoded as a 4 bit value
+	
+	ExteriorLights ::= BIT STRING{
+		--All lights off is indicated bu no bits set
+		lowBeamHeadlightsOn(0),
+		highBeamHeadlightsOn(1),
+		leftTurnSignalOn(2),
+		rightTurnSignalOn(3),
+		hazardSignalOn(4),
+		automaticLightControlOn(5),
+		daytimeRunningLightsOn(6),
+		fogLightOn(7),
+		parkingLightsOn(8)
+	}(SIZE(9,...))
+	
+	GNSSstatus ::= BIT STRING {
+		unavailable (0), -- Not Equipped or unavailable
+		isHealthy (1),
+		isMonitored (2),
+		baseStationType (3), -- Set to zero if a moving base station,
+		-- or if a rover device (an OBU),
+		-- set to one if it is a fixed base station
+		aPDOPofUnder5 (4), -- A dilution of precision greater than 5
+		inViewOfUnder5 (5), -- Less than 5 satellites in view
+		localCorrectionsPresent (6), -- DGPS type corrections used
+		networkCorrectionsPresent (7) -- RTK type corrections used
+	} (SIZE(8))
+	
+	Heading ::= INTEGER (0..28800)
+	-- LSB of 0.0125 degrees
+	-- A range of 0 to 359.9875 degrees
+	
+	HeadingConfidence ::= ENUMERATED {
+		unavailable (0), -- B'000 Not Equipped or unavailable
+		prec10deg (1), -- B'010 10 degrees
+		prec05deg (2), -- B'011 5 degrees
+		prec01deg (3), -- B'100 1 degrees
+		prec0-1deg (4), -- B'101 0.1 degrees
+		prec0-05deg (5), -- B'110 0.05 degrees
+		prec0-01deg (6), -- B'110 0.01 degrees
+		prec0-0125deg (7) -- B'111 0.0125 degrees, aligned with heading LSB
+	} -- Encoded as a 3 bit value
+	
+	IntersectionStatusObject ::= BIT STRING {
+		manualControlIsEnabled (0),
+		-- Timing reported is per programmed values, etc. but person
+		-- at cabinet can manually request that certain intervals are
+		-- terminated early (e.g. green).
+		stopTimeIsActivated (1),
+		-- And all counting/timing has stopped.
+		failureFlash (2),
+		-- Above to be used for any detected hardware failures,
+		-- e.g. conflict monitor as well as for police flash
+		preemptIsActive (3),
+		signalPriorityIsActive (4),
+		-- Additional states
+		fixedTimeOperation (5),
+		-- Schedule of signals is based on time only
+		-- (i.e. the state can be calculated)
+		trafficDependentOperation (6),
+		-- Operation is based on different levels of traffic parameters
+		-- (requests, duration of gaps or more complex parameters)
+		standbyOperation (7),
+		-- Controller: partially switched off or partially amber flashing
+		failureMode (8),
+		-- Controller has a problem or failure in operation
+		off (9),
+		-- Controller is switched off
+		-- Related to MAP and SPAT bindings
+		recentMAPmessageUpdate (10),
+		-- Map revision with content changes
+		recentChangeInMAPassignedLanesIDsUsed (11),
+		-- Change in MAP's assigned lanes used (lane changes)
+		-- Changes in the active lane list description
+		noValidMAPisAvailableAtThisTime (12),
+		-- MAP (and various lanes indexes) not available
+		noValidSPATisAvailableAtThisTime (13)
+		-- SPAT system is not working at this time
+		-- Bits 14,15 reserved at this time and shall be zero
+	} (SIZE(16))
+	
+	LaneAttributes-Barrier ::= BIT STRING {
+		-- With bits as defined:
+		median-RevocableLane (0),
+		-- this lane may be activated or not based
+		-- on the current SPAT message contents
+		-- if not asserted, the lane is ALWAYS present
+		median (1),
+		whiteLineHashing (2),
+		stripedLines (3),
+		doubleStripedLines (4),
+		trafficCones (5),
+		constructionBarrier (6),
+		trafficChannels (7),
+		lowCurbs (8),
+		highCurbs (9) -- Bits 10 ~ 15 reserved and set to zero
+	} (SIZE (16))
+	
+	LaneAttributes-Bike ::= BIT STRING {
+		-- With bits as defined:
+		bikeRevocableLane (0),
+		-- this lane may be activated or not based
+		-- on the current SPAT message contents
+		-- if not asserted, the lane is ALWAYS present
+		pedestrianUseAllowed (1),
+		-- The path allows pedestrian traffic,
+		-- if not set, this mode is prohibited
+		isRikeFlyOverLane (2),
+		-- path of lane is not at grade
+		fixedCyeleTime (3),
+		-- the phases use preset times
+		-- - i.e. there is not a 'push to cross' button
+		biDirectionalCycleTimes (4),
+		-- ped walk phases use different SignalGroupID
+		-- for each direction. The first SignalGroupID
+		-- in the first Connection represents 'inbound'
+		-- flow (the direction of travel towards the first
+		-- node point) while second SignalGroupID in the
+		-- next Connection entry represents the 'outbound'
+		-- flow. And use of RestrictionClassID entries
+		-- in the Connect follow this same pattern in pairs.
+		isolatedByBarrier (5),
+		unsignalizedSegmentsPresent (6)
+		-- The lane path consists of one of more segments
+		-- which are not part of a signal group ID
+		-- Bits 7 ~ 15 reserved and set to zero
+	} (SIZE (16))
+	
+	LaneAttributes-Crosswalk ::= BIT STRING {
+		-- With bits as defined:
+		-- MUTCD provides no suitable "types" to use here
+		crosswalkRevocableLane (0),
+		-- this lane may be activated or not based
+		-- on the current SPAT message contents
+		-- if not asserted, the lane is ALWAYS present
+		bicyleLJseAliowed (1),
+		-- The path allows bicycle traffic,
+		-- if not set, this mode is prohibited
+		isXwalkFlyOverLane (2),
+		-- path of lane is not at grade
+		fixedCycleTime (3),
+		-- ped walk phases use preset times
+		-- i.e. there is not a 'push to cross' button
+		biDirectionalCycleTimes (4),
+		-- ped walk phases use different SignalGroupID
+		-- for each direction. The first SignalGroupID
+		-- in the first Connection represents 'inbound'
+		-- flow (the direction of travel towards the first
+		-- node point) while second SignalGroupID in the
+		-- next Connection entry represents the 'outbound'
+		-- flow. And use of RestrictionClassID entries
+		-- in the Connect follow this same pattern in pairs.
+		hasPushToWalkButton (5),
+		-- Has a demand input
+		audioSupport (6),
+		-- audio crossing cues present
+		rfSignalRequestPresent (7),
+		-- Supports RF push to walk technologies
+		unsignalizedSegmentsPresent (8)
+		-- The lane path consists of one of more segments
+		-- which are not part of a signal group ID
+		-- Bits 9 ~ 15 reserved and set to zero
+	} (SIZE (16))
+	
+	LaneAttributes-Parking ::= BIT STRING {
+		--With bits as defined:
+		--Parking use details, note that detailed restrictions such as
+		--allowed hours are sent by way of ITIS codes in the TIM message
+		parkingRevocableLane (0),
+		--this lane may be activated or not based
+		-- on the current SPAT message contents
+		-- if not asserted, the lane is ALWAYS present
+		parallelParkingInUse (1),
+		headInParkingInUse (2),
+		doNotParkZone (3),
+		-- used to denote fire hydrants as well as
+		-- short disruptions in a parking zone
+		parkingForBusUse (4),
+		parkingForTaxiUse (5),
+		noPublicParkingUse (6)
+		-- private parking, as in front of
+		-- private property
+		-- Bits 7 ～ 15 reserved and set to zero
+	} (SIZE (16))
+	
+	LaneAttributes-Sidewalk ::= BIT STRING { -- With bits as defined:
+		sidewalk-RevocableLane (0),
+		-- this lane may be activated or not based
+		-- on the current SPAT message contents
+		-- if not asserted, the lane is ALWAYS present
+		bicyleUseAllowed (1),
+		-- The path allows bicycle traffic,
+		-- if not set, this mode is prohibited
+		isSidewalkFlyOverLane (2),
+		-- path of lane is not at grade
+		walkBikes (3)
+		-- bike traffic must dismount and walk
+		-- Bits 4 ～ 15 reserved and set to zero
+	} (SIZE (16))
+	
+	LaneAttributes-Striping ::= BIT STRING {
+		-- With bits as defined:
+		stripeToConnectingLanesRevocableLane (0),
+		-- this lane may be activated or not activated based
+		-- on the current SPAT message contents
+		-- if not asserted, the lane is ALWAYS present
+		stripeDrawOnLeft (1),
+		stripeDrawOnRight (2),
+		-- which side of lane to mark
+		stripeToConnectingLanesLeft (3),
+		stripeToConnectingLanesRight (4),
+		stripeToConnectingLanesAhead (5)
+		-- the stripe type should be
+		-- presented to the user visually
+		-- to reflect stripes in the
+		-- intersection for the type of
+		-- movement indicated
+		-- Bits 6 ～ 15 reserved and set to zero
+	} (SIZE (16))
+	
+	LaneAttributes-TrackedVehicle ::= BIT STRING {
+		-- With bits as defined:
+		spec-RevocableLane (0),
+		-- this lane may be activated or not based
+		-- on the current SPAT message contents
+		-- if not asserted, the lane is ALWAYS present
+		spec-commuterRailRoadTrack (1),
+		spec-lightRailRoadTrack (2),
+		spec-heavyRailRoadTrack (3),
+		spec-otherRailType (4) -- Bits 5 ～ 15 reserved and set to zero
+	} (SIZE (16))
+	
+	LaneAttributes-Vehicle ::= BIT STRING {
+		-- With bits as defined:
+		isVehicleRevocableLane (0),
+		-- this lane may be activated or not based
+		-- on the current SPAT message contents
+		-- if not asserted, the lane is ALWAYS present
+		isVehicleFlyOverLane (1),
+		-- path of lane is not at grade
+		hovLaneUseOnly (2),
+		restrictedToBusUse (3),
+		restrictedToTaxiUse (4),
+		restrictedFromPublicUse (5),
+		hasIRbeaconCoverage (6),
+		permissionOnRequest (7) --e.g. to inform about a lane for e-cars
+	} (SIZE (8,...))
+	
+	LaneID ::= INTEGER (0..255)
+		--the value 0 shall be used when the lane ID is
+		--not available or not known
+		--the value 255 is reserved for future use
+	
+	LaneSharing ::= BIT STRING {
+		-- With bits as defined:
+		overlappingLaneDescriptionProvided (0),
+		-- Assert when another lane object is present to describe the
+		-- path of the overlapping shared lane
+		-- this construct is not used for lane objects which simply cross
+		multipleLanesTreatedAsOneLane (1),
+		-- Assert if the lane object path and width details represents
+		-- multiple lanes within it that are not further described
+		-- Various modes and type of traffic that may share this lane:
+		otherNonMotorizedTrafficTypes (2), -- horse drawn etc.
+		individualMotorizedVehicleTraffic (3),
+		busVehicleTraffic (4),
+		taxiVehicleTraffic (5),
+		pedestriansTraffic (6),
+		cyclistVehicleTraffic (7),
+		trackedVehicleTraffic (8),
+		pedestrianTraffic (9)
+	} (SIZE (10))
+		-- All zeros would indicate 'not shared' and 'not overlapping'
+	
+	LaneWidth ::= INTEGER (0..32767)
+	--units of 1 cm
+	
+	Latitude ::= INTEGER (-900000000..900000001)
+	--LSR = 1/10 micro degree
+	--Providing a range of plus-minus 90 degrees
+	
+	LightState ::= ENUMERATED {
+		-- Note that based on the regions and the operating mode not every
+		-- phase will be used in all transportation modes and that not
+		-- every phase will be used in all transportation modes
+		unavailable (0),
+		-- This state is used for unknown or error
+		dark (1),
+		-- The signal head is dark (unlit)
+		-- Reds
+		stop-Then-Proceed (2),
+		-- 'flashing red'
+		-- Driver Action:
+		-- Stop vehicle at stop line.
+		-- Do not proceed unless it is safe.
+		-- Note that the right to proceed either right or left when
+		-- it is safe may be contained in the lane description to
+		-- handle what is called a 'right on red'
+		stop-And-Remain (3),
+		-- 'red light'
+		-- Driver Action:
+		-- Stop vehicle at stop line.
+		-- Do not proceed.
+		-- Note that the right to proceed either right or left when
+		-- it is safe may be contained in the lane description to
+		-- handle what is called a 'right on red'
+		-- Greens
+		pre-Movement (4),
+		-- Not used in the US, red+yellow partly in EU, VMS partly in China
+		-- Driver Action:
+		-- Stop vehicle.
+		-- Prepare to proceed (pending green)
+		-- (Prepare for transition to green/go)
+		permissive-Movement-Allowed (5),
+		-- 'permissive green'
+		-- Driver Action:
+		-- Proceed with caution,
+		-- must yield to all conflicting traffic
+		-- Conflicting traffic may be present
+		-- in the intersection conflict area
+		protected-Movement-Allowed (6),
+		-- 'protected green'
+		-- Driver Action:
+		-- Proceed, tossing caution to the wind,
+		-- in indicated (allowed) direction.
+		-- Yellows / Ambers
+		-- The vehicle is not allowed to cross the stop bar if it is possible
+		-- to stop without danger.
+		intersection-clearance (7),
+		-- 'yellow light'
+		-- Driver Action:
+		-- Prepare to stop.
+		-- Proceed if unable to stop,
+		-- in indicated direction (to connected lane)
+		-- Clear Intersection.
+		caution-Conflicting-Traffic (8)
+		-- 'flashing yellow'
+		-- Often used for extended periods of time
+		-- Driver Action:
+		-- Proceed with caution,
+		-- Conflicting traffic may be present
+		-- in the intersection conflict area
+	}
+	
+	Longitude ::= INTEGER (-1799999999..1800000001)
+	-- LSB = 1/10 micro degree
+	-- Providing a range of plus-minus 180 degrees
+	
+	MinuteOfTheYear ::= INTEGER (0..527040)
+	-- the value 527040 shall be used for invalid
+	
+	MsgCount ::= INTEGER (0..127)
+	
+	NodeID ::= INTEGER (0..65535)
+	-- The values zero through 255 are allocated for testing purposes
+	-- Note that the value assigned to a node will be
+	-- unique within a given regional ID only
+	
+	OffsetLL-B12 ::= INTEGER (-2048..2047)
+	-- A range of +- 0.0002047 degrees
+	-- In LSB units of 0.1 microdegrees
+	
+	OffsetLL-B14 ::= INTEGER (-8192..8191)
+	--A range of H— 0.0008191 degrees
+	--In LSB units of 0.1 microdegrees
+	
+	OffsetLL-B16 ::= INTEGER (-32768..2767)
+	--A range of +- 0.0032767 degrees
+	--In LSB units of 0.1 microdegrees
+	
+	OffsetLL-B18 ::= INTEGER (-131072..131071)
+	--A range of H— 0.0131071 degrees
+	--In LSB units of 0.1 microdegrees
+	
+	OffsetLL-B22 ::= INTEGER (-2097152..2097151)
+	--A range of H— 0.2097151 degrees
+	--In LSB units of 0.1 microdegrees
+	
+	OffsetLL-B24 ::= INTEGER (-8388608..8388607)
+	--A range of H— 0.8388607 degrees
+	--In LSB units of 0.1 microdegrees
+	
+	ParticipantType ::= ENUMERATED {
+		unknown (0), -- B'0000 Unknown
+		motor (1), -- B'0001 motor
+		non-motor (2), -- B'0010 non-motor
+		pedestrian (3), --B'0011 pedestrian
+		rsu (4), --B'0100 rsu
+		...
+	}
+	
+	PhaseID ::= INTEGER (0..255)
+	--The value 0 shall be used when the ID is not available or not known
+	
+	PositionConfidence ::= ENUMERATED {
+		unavailable (0), -- B'0000 Not Equipped or unavailable
+		a500m (1), -- B'0001 500m or about 5 * 10 ' -3 decimal degrees
+		a200m (2), -- B'0010 200m or about 2 * 10 "-3 decimal degrees
+		alOOm (3), -- B'0011 100m or about 1 * 10 A -3 decimal degrees
+		a50m (4), -- B'0100 50m or about 5 * 10 "-4 decimal degrees
+		a20m (5), -- B'0101 20m or about 2 * 10 ^ -4 decimal degrees
+		a10m (6), -- B'0110 10m or about 1 * 10 ^ -4 decimal degrees
+		a5m (7), -- B'0111 5m or about 5 * 10 ^ -5 decimal degrees
+		a2m (8), -- B'1000 2m or about 2 * 10 ^ -5 decimal degrees
+		a1m (9), -- B'1001 1m or about 1 * 10 ^ -5 decimal degrees
+		a50cm (10), -- B'1010 0.50m or about 5 * 10 ^ -6 decimal degrees
+		a20cm (11), -- B'1011 0.20m or about 2 * 10 ^ -6 decimal degrees
+		a10cm (12), -- B'1100 0.10m or about 1 * 10 ^ -6 decimal degrees
+		a5cm (13), -- B'1101 0.05m or about 5 * 10 ^ -7 decimal degrees
+		a2cm (14), -- B'1110 0.02m or about 2 * 10 ^ -7 decimal degrees
+		a1cm (15) -- B'1111 0.01m or about 1 * 10 ^ -7 decimal degrees
+	} -- Encoded as a 4 bit value
+	
+	Priority ::= OCTET STRING (SIZE(1))
+	-- The lower five bits are reserved and shall be set to zero
+	-- Value from B00000000 to B11100000 represents the lowest to the highest level
+	
+	Radius ::= INTEGER (0..1024)
+	-- Radius of roadside alert
+	-- Unit is 0.1m
+	
+	RadiusOfCurvature ::= INTEGER (-32767..32767)
+	-- LSB units of 10cm
+	-- A straight path to use value of 32767
+	
+	RoadRegulatorID ::= INTEGER (0..65535)
+	-- The value zero shall be used for testing only
+	
+	SourceType ::= ENUMERATED {
+		unknown(0), -- 0 Unknown
+		selfinfo(1), -- 1 infomation from itself
+		v2x(2), -- 2 v2x
+		video(3), -- 3 video
+		microwaveRadar(4), -- 4 microwave radar
+		loop(5), -- 5 loop
+		...
+	}
+	
+	Speed ::= INTEGER (0..8191)
+	-- Units of 0.02 m/s
+	-- The value 8191 indicates that
+	-- speed is unavailable
+	
+	SpeedConfidence ::= ENUMERATED {
+		unavailable (0), -- Not Equipped or unavailable
+		prec100ms (1), -- 100 meters / sec
+		prec10ms (2), -- 10 meters / sec
+		prec5ms (3), -- 5 meters / sec
+		prec1ms (4), -- 1 meters / sec
+		precO-lms (5), -- 0.1 meters / sec
+		prec0-05ms (6), -- 0.05 meters / sec
+		precO-Olms (7) -- 0.01 meters / sec
+	}-- Encoded as a 3 bit value
+	
+	SpeedLimitType ::= ENUMERATED {
+		unknown, -- Speed limit type not available
+		maxSpeedlnSchoolZone, -- Only sent when the limit is active
+		maxSpeedlnSchoolZoneWhenChildrenArePresent, -- Sent at any time
+		maxSpeedlnConstractionZone, -- Used for work zones, incident zones, etc.
+		-- where a reduced speed is present
+		vehicleMinSpeed,
+		vehicleMaxSpeed, -- Regulatory speed limit for general traffic
+		vehicleNightMaxSpeed,
+		truckMinSpeed,
+		truckMaxSpeed,
+		truckNightMaxSpeed,
+		vehiclesWithTrailersMinSpeed,
+		vehiclesWithTrailersMaxSpeed,
+		vehiclesWithTrailersNightMaxSpeed,
+		...
+	}
+	
+	StabilityControlStatus ::= ENUMERATED {
+		unavailable (0), -- B'OO Not Equipped with SC
+		-- or SC status is unavailable
+		off (1), -- B'01 Off
+		on (2), -- B'10 On or active (but not engaged)
+		engaged (3) -- B'll stability control is Engaged
+	}
+	
+	SteeringWheelAngle ::= INTEGER (-126..127)
+	-- LSB units of 1.5 degrees, a range of -189 to +189 degrees
+	-- +001 = +1.5 deg
+	-- -126 = -189 deg and beyond
+	-- +126 = +189 deg and beyond
+	-- +127 to be used for unavailable
+	
+	SteeringWheelAngleConfidence ::= ENUMERATED {
+		unavailable (0), --B'OO Not Equipped with Wheel angle
+		--or Wheel angle status is unavailable
+		prec2deg (1), --B'01 2 degrees
+		precldeg (2), --B'10 1 degree
+		prec0-02deg (3) --B'll 0.02 degrees
+	}--Encoded as a 2 bit value
+	
+	TimeConfidence ::= ENUMERATED {
+		unavailable (0), -- Not Equipped or unavailable
+		time-100-000 (1), -- Better than 100 Seconds
+		time-050-000 (2), -- Better than 50 Seconds
+		time-020-000 (3), -- Better than 20 Seconds
+		time-010-000 (4), -- Better than 10 Seconds
+		time-002-000 (5), -- Better than 2 Seconds
+		time-001-000 (6), -- Better than 1 Second
+		time-000-500 (7), -- Better than 0.5 Seconds
+		time-000-200 (8), -- Better than 0.2 Seconds
+		time-000-100 (9), -- Better than 0.1 Seconds
+		time-000-050 (10), -- Better than 0.05 Seconds
+		time-000-020 (11), -- Better than 0.02 Seconds
+		time-000-010 (12), -- Better than 0.01 Seconds
+		time-000-005 (13), -- Better than 0.005 Seconds
+		time-000-002 (14), -- Better than 0.002 Seconds
+		time-000-001 (15), -- Better than 0.001 Seconds
+		-- Better than one millisecond
+		time-000-000-5 (16), -- Better than 0.000,5 Seconds
+		time-000-000-2 (17), -- Better than 0.000,2 Seconds
+		time-000-000-1 (18), -- Better than 0.000,1 Seconds
+		time-000-000-05 (19), -- Better than 0.000,05 Seconds
+		time-000-000-02 (20), -- Better than 0.000,02 Seconds
+		time-000-000-01 (21), -- Better than 0.000,01 Seconds
+		time-000-000-005 (22), -- Better than 0.000,005 Seconds
+		time-000-000-002 (23), -- Better than 0.000,002 Seconds
+		time-000-000-001 (24), -- Better than 0.000,001 Seconds
+		-- Better than one micro second
+		time-000-000-000-5 (25), -- Better than 0.000,000,5 Seconds
+		time-000-000-000-2 (26), -- Better than 0.000,000,2 Seconds
+		time-000-000-000-1 (27), -- Better than 0.000,000,1 Seconds
+		time-000-000-000-05 (28), -- Better than 0.000,000,05 Seconds
+		time-000-000-000-02 (29), -- Better than 0.000,000,02 Seconds
+		time-000-000-000-01 (30), -- Better than 0.000,000,01 Seconds
+		time-000-000-000-005 (31), -- Better than 0.000,000,005 Seconds
+		time-000-000-000-002 (32), -- Better than 0.000,000,002 Seconds
+		time-000-000-000-001 (33), -- Better than 0.000,000,001 Seconds
+		-- Better than one nano second
+		time-000-000-000-000-5 (34), -- Better than 0.000,000,000,5 Seconds
+		time-000-000-000-000-2 (35), -- Better than 0.000,000,000,2 Seconds
+		time-000-000-000-000-1 (36), -- Better than 0.000,000,000,1 Seconds
+		time-000-000-000-000-05 (37), -- Better than 0.000,000,000,05 Seconds
+		time-000-000-000-000-02 (38), -- Better than 0.000,000,000,02 Seconds
+		time-000-000-000-000-01 (39) -- Better than 0.000,000,000,01 Seconds
+	}
+	
+	TimeMark ::= INTEGER (0..36001)
+	-- Tenths of a second in the current or next hour
+	-- In units of 1/10th second from UTC time
+	-- A range of 0 ～ 36000 covers one hour
+	-- The values 35991..35999 are used when a leap second occurs
+	-- The value 36000 is used to indicate time >3600 seconds
+	-- 36001 is to be used when value undefined or unknown
+	-- Note that this is NOT expressed in GNSS time
+	-- or in local time
+	
+	TimeOffset ::= INTEGER (1..65535)
+	-- LSB units of of 10 mSec,
+	-- with a range of 0.01 seconds to 10 minutes and 55.34 seconds
+	-- a value of 65534 to be used for 655.34 seconds or greater
+	-- a value of 65535 to be unavailable
+	
+	TractionControlStatus ::= ENUMERATED {
+		unavailable (0), -- B'00 Not Equipped with traction control
+		-- or traction control status is unavailable
+		off (1), -- B'01 traction control is Off
+		on (2), -- B'10 traction control is On (but not Engaged)
+		engaged (3) -- B'11 traction control is Engaged
+	}
+	
+	TransmissionState ::= ENUMERATED {
+		neutral (0), -- Neutral
+		park (1), -- Park
+		forwardGears (2), -- Forward gears
+		reverseGears (3), -- Reverse gears
+		reserved1 (4),
+		reserved2 (5),
+		reserved3 (6),
+		unavailable (7)-- not-equipped or unavailable value,
+	}-- Any related speed is relative to the vehicle reference frame used
+	
+	VehicleEventFlags ::= BIT STRING {
+		eventHazarrlLights (0),
+		eventStopLineViolation (1), --Intersection Violation
+		eventABSactivated (2),
+		eventTractionControlLoss (3),
+		eventStabilityControlactivated (4),
+		eventHazardousMaterials (5),
+		eventReservedl (6),
+		eventHardBraking (7),
+		eventLightsChanged (8),
+		eventWipersChanged (9),
+		eventFlatTire (10),
+		eventDisabledVehicle (11), --The DisabledVehicle DF may also be sent
+		eventAirBagDeployment (12)
+	} (SIZE (13, ...))
+	
+	VehicleHeight ::= INTEGER (0..127)
+	-- LSB units of 5 cm, range to 6.35 meters
+	
+	VehicleLength ::= INTEGER (0.. 4095)
+	-- LSB units of 1 cm with a range of >40 meters
+	
+	VehicleWidth ::= INTEGER (0..1023)
+	--LSB units are 1 cm with a range of >10 meters
+	
+	VerticalAcceleration ::= INTEGER (-127..127)
+	-- LSB units of 0.02 G steps over -2.52 to +2.54 G
+	-- The value +127 shall be used for ranges >= 2.54 G
+	-- The value -126 shall be used for ranges <= 2.52 G
+	-- The value -127 shall be used for unavailable
+	
+	VertOffset-B07 ::= INTEGER (-64..63)
+	-- LSB units of of 10 cm
+	-- with a range of +- 6.3 meters vertical
+	-- value 63 to be used for 63 or greater
+	-- value -63 to be used for -63 or greater
+	-- value -64 to be unavailable
+	
+	VertOffset-B08 ::= INTEGER (-128..127)
+	-- LSB units of of 10 cm
+	-- with a range of +- 12.7 meters vertical
+	-- value 127 to be used for 127 or greater
+	-- value -127 to be used for -127 or greater
+	-- value -128 to be unavailable
+	
+	VertOffset-B09 ::= INTEGER (-256..255)
+	-- LSB units of of 10 cm
+	-- with a range of +- 25.5 meters vertical
+	-- value 255 to be used for 255 or greater
+	-- value -255 to be used for -255 or greater
+	-- value -256 to be unavailable
+	
+	VertOffset-B10 ::= INTEGER (-512..511)
+	-- LSB units of of 10 cm
+	-- with a range of +- 51.1 meters vertical
+	-- value 511 to be used for 511 or greater
+	-- value -511 to be used for -511 or greater
+	-- value -512 to be unavailable
+	
+	VertOffset-B11 ::= INTEGER (-1024..1023)
+	-- LSB units of of 10 cm
+	-- with a range of +- 102.3 meters vertical
+	-- value 1023 to be used for 1023 or greater
+	-- value -1023 to be used for -1023 or greater
+	-- value -1024 to be unavailable
+	
+	VertOffset-B12 ::= INTEGER (-2048..2047)
+	-- LSB units of of 10 cm
+	-- with a range of +- 204.7 meters vertical
+	-- value 2047 to be used for 2047 or greater
+	-- value -2047 to be used for -2047 or greater
+	-- value -2048 to be unavailable
+	
+	YawRate ::= INTEGER (-32767..32767)
+	-- LSB units of 0.01 degrees per second (signed)
 		
-		AuxiliaryBrakeStatus ::= ENUMERATED {
-			unavailable (0), -- B'00 Vehicle Not Equipped with Aux Brakes -- or Aux Brakes status is unavailable
-			off (1), -- B'01 Vehicle's Aux Brakes are Off
-			
-		
-		
-	
-	
-	
-	
-	
+
 END

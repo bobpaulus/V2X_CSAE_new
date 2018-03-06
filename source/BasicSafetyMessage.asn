@@ -1,7 +1,23 @@
 BasicSafetyMessage DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 EXPORTS BasicSafetyMessage;
+IMPORTS MsgCount, MsgCount FROM DataElements
+		DSecond, DSecond FROM DataElements
+		Position3D, Position3D FROM DataFrame
+		PositionConfidenceSet, PositionConfidenceSet FROM DataFrame
+		TransmissionState, TransmissionState FROM DataElements
+		Speed, Speed FROM DataElements
+		Heading, Heading FROM DataElements
+		SteeringWheelAngle, SteeringWheelAngle FROM DataElements
+		MotionConfidenceSet, MotionConfidenceSet FROM DataFrame
+		AccelerationSet4Way, AccelerationSet4Way FROM DataFrame
+		BrakeSystemStatus, BrakeSystemStatus FROM DataFrame
+		VehicleSize, VehicleSize FROM DataFrame
+		VehicleClassification, VehicleClassification FROM DataFrame
+		VehicleSafetyExtensions, VehicleSafetyExtensions FROM DataFrame
+		DYear, DYear FROM DataElements;
+		
 	BasicSafetyMessage::=SEQUENCE{
-		msgCnt MsgCoutn,
+		msgCnt MsgCount,
 		id OCTET STRING(SIZE(8)),
 		--vehicle ID
 		plateNo OCTET STRING(SIZE(4..16)) OPTIONAL,
@@ -20,6 +36,7 @@ EXPORTS BasicSafetyMessage;
 		vehicleClass VehicleClassification,
 		--VehicleClassification includes BasicVehicleClass and other extendible type
 		safetyExt VehicleSafetyExtensions OPTIONAL,
+		dYear DYear,
 		...
 	}
 	

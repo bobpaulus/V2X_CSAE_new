@@ -1,7 +1,13 @@
 RoadSideInformation DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 
 EXPORTS RoadSideInformation;
-IMPORTS ;
+IMPORTS MsgCount, MsgCount FROM DataElements
+		MinuteOfTheYear, MinuteOfTheYear FROM DataElements
+		AlertType, AlertType FROM DataElements
+		Priority, Priority FROM DataElements
+		Position3D, Position3D FROM DataFrame
+		PathPointList, PathPointList FROM DataFrame
+		Radius, Radius FROM DataElements;
 	RoadSideInformation ::=SEQUENCE{
 		msgCnt MsgCount,
 		timeStamp MinuteOfTheYear OPTIONAL, id OCTET STRING (SIZE(8)),

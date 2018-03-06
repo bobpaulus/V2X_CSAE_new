@@ -1,0 +1,611 @@
+DataFrame DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+
+EXPORTS AccelerationSet4Way,
+		BrakeSystemStatus,
+		ConnectingLane,
+		Connection,
+		ConnectsToList,
+		DDateTime,
+		FullPositionVector,
+		IntersectionState,
+		IntersectionStateList,
+		Lane,
+		LaneAttributes,
+		LaneList,
+		LaneTypeAttributes,
+		Link,
+		LinkList,
+		MotionConfidenceSet,
+		Movement,
+		MovementList,
+		Node,
+		NodeList,
+		NodeReferenceID,
+		ParticipantData,
+		ParticipantList,
+		PathHistory,
+		PathHistoryPoint,
+		PathHistoryPointList,
+		PathPointList,
+		PathPrediction,
+		Phase,
+		PhaseList,
+		PhaseState,
+		PhaseStateList,
+		PointList,
+		Position-LL-24B,
+		Position-LL-28B,
+		Position-LL-32B,
+		Position-LL-36B,
+		Position-LL-44B,
+		Position-LL-48B,
+		Position-LLmD-64b,
+		Position3D,
+		PositionConfidenceSet,
+		PositionOffsetLL,
+		PositionOffsetLLV,
+		RegulatorySpeedLimit,
+		RoadPoint,
+		SignalState,
+		SpeedLimitList,
+		TimeChangeDetails,
+		VehicleClassification,
+		VehicleSafetyExtensions,
+		VehicleSize,
+		VerticalOffset;
+IMPORTS Acceleration,Acceleration FROM DataElements
+		AlertType,AlertType FROM DataElements
+		AllowedManeuvers,AllowedManeuvers FROM DataElements
+		AntiLockBrakeStatus,AntiLockBrakeStatus FROM DataElements
+		AuxiliaryBrakeStatus,AuxiliaryBrakeStatus FROM DataElements
+		BasicVehicleClass,BasicVehicleClass FROM DataElements
+		BrakeAppliedStatus,BrakeAppliedStatus FROM DataElements
+		BrakeBoostApplied,BrakeBoostApplied FROM DataElements
+		BrakePedalStatus,BrakePedalStatus FROM DataElements
+		CoarseHeading,CoarseHeading FROM DataElements
+		Confidence,Confidence FROM DataElements
+		DDay,DDay FROM DataElements
+		DescriptiveName,DescriptiveName FROM DataElements
+		DHour,DHour FROM DataElements
+		DMinute,DMinute FROM DataElements
+		DMonth,DMonth FROM DataElements
+		DSecond,DSecond FROM DataElements
+		DTimeOffset,DTimeOffset FROM DataElements
+		DYear,DYear FROM DataElements
+		Elevation,Elevation FROM DataElements
+		ElevationConfidence,ElevationConfidence FROM DataElements
+		ExteriorLights,ExteriorLights FROM DataElements
+		GNSSstatus,GNSSstatus FROM DataElements
+		Heading,Heading FROM DataElements
+		HeadingConfidence,HeadingConfidence FROM DataElements
+		IntersectionStatusObject,IntersectionStatusObject FROM DataElements
+		LaneAttributes-Barrier,LaneAttributes-Barrier FROM DataElements
+		LaneAttributes-Bike,LaneAttributes-Bike FROM DataElements
+		LaneAttributes-Crosswalk,LaneAttributes-Crosswalk FROM DataElements
+		LaneAttributes-Parking,LaneAttributes-Parking FROM DataElements
+		LaneAttributes-Sidewalk,LaneAttributes-Sidewalk FROM DataElements
+		LaneAttributes-Striping,LaneAttributes-Striping FROM DataElements
+		LaneAttributes-TrackedVehicle,LaneAttributes-TrackedVehicle FROM DataElements
+		LaneAttributes-Vehicle,LaneAttributes-Vehicle FROM DataElements
+		LaneID,LaneID FROM DataElements
+		LaneSharing,LaneSharing FROM DataElements
+		LaneWidth,LaneWidth FROM DataElements
+		Latitude,Latitude FROM DataElements
+		LightState,LightState FROM DataElements
+		Longitude,Longitude FROM DataElements
+		MinuteOfTheYear,MinuteOfTheYear FROM DataElements
+		MsgCount,MsgCount FROM DataElements
+		NodeID,NodeID FROM DataElements
+		OffsetLL-B12,OffsetLL-B12 FROM DataElements
+		OffsetLL-B14,OffsetLL-B14 FROM DataElements
+		OffsetLL-B16,OffsetLL-B16 FROM DataElements
+		OffsetLL-B18,OffsetLL-B18 FROM DataElements
+		OffsetLL-B22,OffsetLL-B22 FROM DataElements
+		OffsetLL-B24,OffsetLL-B24 FROM DataElements
+		ParticipantType,ParticipantType FROM DataElements
+		PhaseID,PhaseID FROM DataElements
+		PositionConfidence,PositionConfidence FROM DataElements
+		Priority,Priority FROM DataElements
+		Radius,Radius FROM DataElements
+		RadiusOfCurvature,RadiusOfCurvature FROM DataElements
+		RoadRegulatorID,RoadRegulatorID FROM DataElements
+		SourceType,SourceType FROM DataElements
+		Speed,Speed FROM DataElements
+		SpeedConfidence,SpeedConfidence FROM DataElements
+		SpeedLimitType,SpeedLimitType FROM DataElements
+		StabilityControlStatus,StabilityControlStatus FROM DataElements
+		SteeringWheelAngle,SteeringWheelAngle FROM DataElements
+		SteeringWheelAngleConfidence,SteeringWheelAngleConfidence FROM DataElements
+		TimeConfidence,TimeConfidence FROM DataElements
+		TimeMark,TimeMark FROM DataElements
+		TimeOffset,TimeOffset FROM DataElements
+		TractionControlStatus,TractionControlStatus FROM DataElements
+		TransmissionState,TransmissionState FROM DataElements
+		VehicleEventFlags,VehicleEventFlags FROM DataElements
+		VehicleHeight,VehicleHeight FROM DataElements
+		VehicleLength,VehicleLength FROM DataElements
+		VehicleWidth,VehicleWidth FROM DataElements
+		VerticalAcceleration,VerticalAcceleration FROM DataElements
+		VertOffset-B07,VertOffset-B07 FROM DataElements
+		VertOffset-B08,VertOffset-B08 FROM DataElements
+		VertOffset-B09,VertOffset-B09 FROM DataElements
+		VertOffset-B10,VertOffset-B10 FROM DataElements
+		VertOffset-B11,VertOffset-B11 FROM DataElements
+		VertOffset-B12,VertOffset-B12 FROM DataElements
+		YawRate,YawRate FROM DataElements;
+		
+	AccelerationSet4Way ::= SEQUENCE {
+		long Acceleration,
+		-- Along the Vehicle Longitudinal axis
+		lat Acceleration,
+		-- Along the Vehicle Lateral axis
+		vert VerticalAcceleration,
+		-- Along the Vehicle Vertical axis
+		yaw YawRate
+	}
+	
+	BrakeSystemStatus ::= SEQUENCE {
+		brakePadel BrakePedalStatus OPTIONAL,
+		wheelBrakes BrakeAppliedStatus OPTIONAL,
+		traction TractionControlStatus OPTIONAL,
+		abs AntiLockBrakeStatus OPTIONAL,
+		scs StabilityControlStatus OPTIONAL,
+		brakeBoost BrakeBoostApplied OPTIONAL,
+		auxBrakes AuxiliaryBrakeStatus OPTIONAL
+	}
+	
+	ConnectingLane ::= SEQUENCE {
+		lane LaneID,
+		-- Index of the connecting lane
+		maneuver AllowedManeuvers OPTIONAL
+		-- The Maneuver between
+		-- the enclosing lane and this lane
+		-- at the stop line to connect them
+	}
+
+	Connection ::= SEQUENCE {
+	remotelntersection NodeReferenceID,
+	-- This entry indicates the downstream intersection of the link this lane connects to.
+	-- This provides a means to create meshes of lanes
+	connectingLane ConnectingLane OPTIONAL,
+	-- The index of the connecting lane and also
+	-- the maneuver from the current lane to it
+	-- When we want to list the allowed lanes of the next link
+	-- this lane can lead to, we use this entry
+	phaseld PhaseID OPTIONAL
+	-- The matching signal group send by
+	-- the SPAT message for this lane/maneuver.
+	-- Shall be present unless the ConnectingLane
+	-- has no signal group (is un-signalized)
+	}
+	
+	ConnectsToList ::= SEQUENCE (SIZE(1..8)) OF Connection
+	
+	DDateTime ::= SEQUENCE {
+		year DYear OPTIONAL,
+		month DMonth OPTIONAL,
+		day DDay OPTIONAL,
+		hour DHour OPTIONAL,
+		minute DMinute OPTIONAL,
+		second DSecond OPTIONAL,
+		offset DTimeOffset OPTIONAL -- time zone
+	}
+	
+	FullPositionVector ::= SEQUENCE {
+		utcTime DDateTime OPTIONAL, -- time with mSec precision
+		pos Position3D,
+		heading Heading OPTIONAL,
+		transmission TransmissionState OPTIONAL,
+		speed Speed OPTIONAL,
+		posAccuracy PositionConfidenceSet OPTIONAL,
+		timeConfidence TimeConfidence OPTIONAL,
+		posConfidence PositionConfidenceSet OPTIONAL,
+		motionCfd MotionConfidenceSet OPTIONAL,
+		...
+	}
+	
+	IntersectionState ::= SEQUENCE {
+		intersectionId NodeReferenceID,
+		-- A globally unique value set, consisting of a
+		-- regionID and intersection ID assignment
+		-- provides a unique mapping to the MAP Node
+		status IntersectionStatusObject,
+		-- general status of the controller(s)
+		moy MinuteOfTheYear OPTIONAL,
+		-- Minute of current UTC year
+		-- used only with messages to be archived
+		timeStamp DSecond OPTIONAL,
+		-- the mSec point in the current UTC minute that
+		-- this message was constructed
+		phases PhaseList
+		-- Each Movement is given in turn
+		-- and contains its signal phase state,
+		-- mapping to the lanes it applies to, and
+		-- point in time it will end, and it
+		-- may contain both active and future states
+	}
+	
+	IntersectionStateList ::= SEQUENCE (SIZE(1..32)) OF IntersectionState
+	
+	Lane ::= SEQUENCE {
+		laneID LaneID,
+		-- The unique ID number assigned
+		-- to this lane object
+		laneAttributes LaneAttributes OPTIONAL,
+		-- Define basic attribute of lane
+		maneuvers AllowedManeuvers OPTIONAL,
+		-- the permitted maneuvers for this lane
+		connectsTo ConnectsToList OPTIONAL,
+		-- connection to downsteam lanes
+		speedLimits SpeedLimitList OPTIONAL,
+		-- List all the speed limits
+		points PointList OPTIONAL,
+		-- Define road points and segments
+		...
+	}
+	
+	LaneAttributes ::= SEQUENCE {
+		shareWith LaneSharing OPTIONAL,
+		laneType LaneTypeAttributes
+	}
+	
+	LaneList ::= SEQUENCE (SIZE(1..32)) OF Lane
+	
+	LaneTypeAttributes ::= CHOICE {
+		vehicle LaneAttributes-Vehicle, -- motor vehicle lanes
+		crosswalk LaneAttributes-Crosswalk, -- pedestrian crosswalks
+		bikeLane LaneAttributes-Bike, -- bike lanes
+		sidewalk LaneAttributes-Sidewalk, -- pedestrian sidewalk paths
+		median LaneAttributes-Barrier, -- medians & channelization
+		striping LaneAttributes-Striping, -- roadway markings
+		trackedVehicle LaneAttributes-TrackedVehicle, -- trains and trolleys
+		parking LaneAttributes-Parking, -- parking and stopping lanes
+		...
+	}
+	
+	Link ::= SEQUENCE {
+		name DescriptiveName OPTIONAL,
+		-- Link name
+		upstreamNodeld NodeReferenceID,
+		-- this link is from upstreamNode to the Node it
+		speedLimits SpeedLimitList OPTIONAL,
+		-- List all the speed limits
+		laneWidth LaneWidth,
+		-- Width of each lane
+		points PointList OPTIONAL,
+		-- Define road points along the center of this link
+		movements MovementList OPTIONAL,
+		-- Define movements at intersection
+		lanes LaneList,
+		-- Lanes belong to this link
+	}
+	
+	LinkList ::= SEQUENCE (SIZE(1..32)) OF Link
+	
+	MotionConfidenceSet ::= SEQUENCE {
+		speedCfd SpeedConfidence OPTIONAL,
+		headingCfd HeadingConfidence OPTIONAL,
+		steerCfd SteeringWheelAngleConfidence OPTIONAL
+	}
+	
+	Movement ::= SEQUENCE {
+		remoteIntersection NodeReferenceID,
+		-- This entry indicates the downstream intersection of the link this lane connects to.
+		-- This provides a means to create meshes of lanes
+		phaseId PhaseID OPTIONAL
+		-- The matching signal group send by
+		-- the SPAT message for this lane/maneuver.
+		-- Shall be present unless the connectingLane
+		-- has no signal group (is un-signalized)
+	}
+	
+	MovementList ::= SEQUENCE (SIZE(1..32)) OF Movement
+	
+	Node ::= SEQUENCE {
+		-- Node can be an intersection, or a road endpoint
+		name DescriptiveName OPTIONAL,
+		-- Node name
+		id NodeReferenceID,
+		-- A globally unique value set,
+		-- consisting of a regionID and
+		-- node ID assignment
+		refPos Position3D,
+		-- 3D position of the center of this Node.
+		-- This position is also the reference position for the elements inside
+		inLinks LinkList OPTIONAL,
+		-- all the links enter this Node
+		...
+	}
+	
+	NodeList ::= SEQUENCE (SIZE(1..32)) OF Node
+	
+	NodeReferenceID ::= SEQUENCE {
+		region RoadRegulatorID OPTIONAL,
+		-- a globally unique regional assignment value
+		-- typical assigned to a regional DOT authority
+		-- the value zero shall be used for testing needs
+		id NodeID,
+		-- a unique mapping to the node
+		-- in question within the above region of use
+	}
+	
+	ParticipantData ::= SEQUENCE {
+		ptcType ParticipantType,
+		ptcId INTEGER (0..65535),
+		-- temporary ID set by RSU
+		-- 0 is RSU itself
+		-- 1..65535 represent participants detected by RSU
+		source SourceType,
+		id OCTET STRING (SIZE(8)) OPTIONAL,
+		plateNo OCTET STRING (SIZE(16)) OPTIONAL,
+		secMark DSecond,
+		pos PositionOffsetLLV,
+		accuracy PositionConfidenceSet,
+		transmission TransmissionState OPTIONAL,
+		speed Speed,
+		heading Heading,
+		angle SteeringWheelAngle OPTIONAL,
+		motionCfd MotionConfidenceSet OPTIONAL,
+		accelSet AccelerationSet4Way OPTIONAL,
+		size VehicleSize,
+		vehicleClass VehicleClassification OPTIONAL,
+		...
+	}
+	
+	ParticipantList ::= SEQUENCE (SIZE(1..16)) OF ParticipantData
+	
+	PathHistory ::= SEQUENCE {
+		initialPosition FullPositionVector OPTIONAL,
+		currGNSSstatus GNSSstatus OPTIONAL,
+		crumbData PathHistoryPointList,
+		...
+	}
+	
+	PathHistoryPoint ::= SEQUENCE {
+		llvOffset PositionOffsetLLV,
+		timeOffset TimeOffset,
+		-- Offset backwards in time
+		speed Speed OPTIONAL,
+		-- Speed over the reported period
+		posAccuracy PositionConfidenceSet OPTIONAL,
+		-- The accuracy of this value
+		heading CoarseHeading OPTIONAL,
+		-- overall heading
+	}
+	
+	PathHistoryPointList ::= SEQUENCE (SIZE(1..23)) OF PathHistoryPoint
+	
+	PathPointList ::= SEQUENCE (SIZE(2..32)) OF PositionOffsetLLV
+	-- Path point list for RSA message
+	
+	PathPrediction ::= SEQUENCE {
+		radiusOfCurve RadiusOfCurvature,
+		-- LSB units of 10cm
+		-- straight path to use value of 32767
+		confidence Confidence,
+		-- LSB units of 0.5 percent
+		...
+	}
+	
+	Phase ::= SEQUENCE{
+	id PhaseID,
+	-- the group id is used to map to lists
+	-- of lanes (and their descriptions)
+	-- which this MovementState data applies to
+	-- see comments in the Remarks for usage details
+	phaseStates PhaseStateList,
+	-- Consisting of sets of movement data with:
+	-- a) SignalPhaseState
+	-- b) TimeChangeDetails, and
+	-- c) AdvisoiySpeeds (optional )
+	-- Note one or more of the movement events may be for
+	-- a future time and that this allows conveying multiple
+	-- predictive phase and movement timing for various uses
+	-- for the current signal group
+	}
+	
+	PhaseList ::= SEQUENCE (SIZE(1..16)) OF Phase
+	-- List of phases in one traffic signal
+	
+	PhaseState ::= SEQUENCE {
+		light LightState,
+		-- Consisting of:
+		-- Phase state (the basic 11 states)
+		-- Directional, protected, or permissive state
+		timing TimeChangeDetails OPTIONAL,
+		-- Timing Data in UTC time stamps for event
+		-- includes start and min/max end times of phase
+		-- confidence and estimated next occurrence
+		...
+	}
+	
+	PhaseStateList ::= SEQUENCE (SIZE(1..16)) OF PhaseState
+	
+	PointList ::= SEQUENCE (SIZE(2..31)) OF RoadPoint
+	-- At least 2 points of 1 lane
+	-- entry line and exit line
+	-- points need to be listed sequatially
+	-- from upstream to downstream
+	
+	Position-LL-24B ::= SEQUENCE {
+		-- ranges of +- 0.0002047 degrees
+		-- ranges of +- 22.634554 meters at the equator
+		lon OffsetLL-B12,
+		lat OffsetLL-B12
+	}
+	
+	Position-LL-28B ::= SEQUENCE {
+		-- ranges of +- 0.0008191 degrees
+		-- ranges of +- 90.571389 meters at the e
+		lon OffsetLL-B14,
+		lat OffsetLL-B14
+	}
+	
+	Position-LL-32B ::= SEQUENCE {
+		-- ranges of +- 0.0032767 degrees
+		-- ranges of +- 362.31873 meters at the equator
+		lon OffsetLL-B16,
+		lat OffsetLL-B16
+	}
+	
+	Position-LL-36B ::= SEQUENCE {
+		-- ranges of +- 0.0131071 degrees
+		-- ranges of +- 01.449308 Kmeters at the equator
+		lon OffsetLL-B18,
+		lat OffsetLL-B18
+	}
+	
+	Position-LL-44B ::= SEQUENCE {
+		-- ranges of H— 0.2097151 degrees
+		-- ranges of +- 23.189096 Kmeters at the equator
+		lon OffsetLL-B22,
+		lat OffsetLL-B22
+	}
+	
+	Position-LL-48B ::= SEQUENCE {
+		-- ranges of H— 0.8388607 degrees
+		-- ranges of H— 92.756481 Kmeters at the equator
+		lon OffsetLL-B24,
+		lat OffsetLL-B24
+	}
+	
+	Position-LLmD-64b ::= SEQUENCE {
+		-- a full 32b Lat/Lon range
+		lon Longitude,
+		lat Latitude
+	}
+	
+	Position3D ::= SEQUENCE {
+		lat Latitude,
+		-- in 1/10th micro degrees
+		long Longitude,
+		-- in 1/10th micro degrees
+		elevation Elevation OPTIONAL
+		-- in 10 cm units
+	}
+	
+	PositionConfidenceSet ::= SEQUENCE {
+		pos PositionConfidence, -- for both horizontal directions
+		elevation ElevationConfidence OPTIONAL
+	}
+	
+	PositionOffsetLL ::= CHOICE {
+		-- Locations with LL content Span at the equator when using a zoom of one:
+		position-LLl Position-LL-24B,
+		-- within +- 22.634554 meters of the reference position
+		position-LL2 Position-LL-28B,
+		-- within +- 90.571389 meters of the reference position
+		position-LL3 Position-LL-32B,
+		-- within +- 362.31873 meters of the reference position
+		position-LL4 Position-LL-36B,
+		-- within +- 01.449308 Kmeters of the reference position
+		position-LL5 Position-LL-44B,
+		-- within +- 23.189096 Kmeters of the reference position
+		position-LL6 Position-LL-48B,
+		-- within +- 92.756481 Kmeters of the reference position
+		position-LatLon Position-LLmD-64b
+		-- node is a full 32b Lat/Lon range
+	}
+	
+	PositionOffsetLLV ::= SEQUENCE {
+		offsetLL PositionOffsetLL,
+		-- offset in lon/lat
+		offsetV VerticalOffset OPTIONAL
+		-- offset in elevation
+	}
+	
+	RegulatorySpeedLimit ::= SEQUENCE {
+		type SpeedLimitType,
+		-- The type of regulatory speed which follows
+		speed Speed
+		-- The speed in units of 0.02 m/s
+		-- See Section 11 for converting and translating
+		-- speed expressed in mph into units of m/s
+	}
+	
+	RoadPoint ::= SEQUENCE {
+		posOffset PositionOffsetLLV,
+		-- Position offset to the reference position
+		...
+	}
+	
+	SignalState ::= SEQUENCE {
+		status IntersectionStatusObject,
+		-- general status of the controller(s)
+		moy MinuteOfTheYear OPTIONAL,
+		-- Minute of current UTC year
+		-- used only with messages to be archived
+		timeStamp DSecond OPTIONAL,
+		-- the mSec point in the current UTC minute that
+		-- this message was constructed
+		phases PhaseList,
+		-- Each Movement is given in turn
+		-- and contains its signal phase state,
+		-- mapping to the lanes it applies to, and
+		-- point in time it will end, and it
+		-- may contain both active and future states
+	}
+	
+	SpeedLimitList ::= SEQUENCE (SIZE(1..9)) OF RegulatorySpeedLimit
+	
+	TimeChangeDetails ::= SEQUENCE {
+		startTime TimeMark,
+		-- When this phase state started,
+		-- if already started, the value is 0
+		minEndTime TimeMark OPTIONAL,
+		-- Expected shortest end time
+		-- if already started, the value is the min left time from now
+		-- if not started, the value means the min length of this phase
+		maxEndTime TimeMark OPTIONAL,
+		-- Expected longest end time
+		-- if already started, the value is the max left time from now
+		-- if not started, the value means the max length of this phase
+		likelyEndTime TimeMark,
+		-- Best predicted value based on other data
+		-- if already started, the value is the likely left time from now
+		-- if not started, the value means the likely length of this phase
+		timeConfidence Confidence OPTIONAL,
+		-- Confidence of likelyTime
+		nextStartTime TimeMark OPTIONAL,
+		-- A rough estimate of time when this phase state may next occur again
+		-- after the above endTime.
+		-- used to support various ECO driving power management needs.
+		-- If already started, this value is recommended to be delivered.
+		nextDuration TimeMark OPTIONAL
+		-- A rough estimate of the time length of this phase state
+		-- when it may next occur again after the above endTime.
+		-- used to support various ECO driving power management needs.
+		-- If already started, this value is recommended to be delivered.
+	}
+
+	VehicleClassification ::= SEQUENCE {
+		classification BasicVehicleClass,
+		...
+	}
+	
+	VehicleSafetyExtensions ::= SEQUENCE {
+		events VehicleEventFlags OPTIONAL,
+		pathHistory PathHistory OPTIONAL,
+		pathPrediction PathPrediction OPTIONAL,
+		lights ExteriorLights OPTIONAL,
+		...
+	}
+	
+	VehicleSize ::= SEQUENCE {
+		width VehicleWidth,
+		length VehicleLength,
+		height VehicleHeight OPTIONAL
+	}
+	
+	VerticalOffset ::= CHOICE {
+		-- Vertieal Offset
+		-- All below in steps of 10cm above or below the reference ellipsoid
+		offset1 VertOffset-B07, -- with a range of +- 6.3 meters vertical
+		offset2 VertOffset-B08, -- with a range of +- 12.7 meters vertical
+		offset3 VertOffset-B09, -- with a range of +- 25.5 meters vertical
+		offset4 VertOffset-B10, -- with a range of +- 51.1 meters vertical
+		offset5 VertOffset-B11, -- with a range of +- 102.3 meters vertical
+		offset6 VertOffset-B12, -- with a range of +- 204.7 meters vertical
+		elevation Elevation -- with a range of -409.5 to + 6143.9 meters
+	}
+END

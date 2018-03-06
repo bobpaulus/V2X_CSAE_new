@@ -1,7 +1,8 @@
 RoadsideSafetyMessage DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 
 EXPORTS RoadsideSafetyMessage;
-IMPORTS ;
+IMPORTS MsgCount, MsgCount FROM DataElements
+		Position3D, Position3D FROM DataFrame;
 	RoadsideSafetyMessage::=SEQUENCE{
 		msgCnt MsgCount,
 		id OCTET STRING (SIZE(8)),
