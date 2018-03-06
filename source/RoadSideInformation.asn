@@ -3,7 +3,33 @@ RoadSideInformation DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 EXPORTS RoadSideInformation;
 IMPORTS ;
 	RoadSideInformation ::=SEQUENCE{
-		
+		msgCnt MsgCount,
+		timeStamp MinuteOfTheYear OPTIONAL, id OCTET STRING (SIZE(8)),
+		-- RSU ID
+		rsiId INTEGER (0..255),
+		-- local ID of this rsi information set by RSU
+		alertType AlertType,
+		-- Text message warning or Traffic sign type according to China GB5768 description IA5String (SIZE(1..256)) OPTIONAL,
+		-- Text message if alertType = 0
+		-- Additional description to the traffic sign if alertType > 0
+		-- e.g. describe the subtype of the traffic sign
+		priority Priority OPTIONAL,
+		-- the urgency of this message, a relative
+		-- degree of merit compared with other
+		-- similar messages for this type (not other
+		-- messages being sent by the device), nor a
+		-- priority of display urgency
+		refPos Position3D,
+		-- Position of traffic alert (traffic sign or incident)
+		alertPath PathPointList,
+		-- Warning is active if vehicle is within this path
+		-- Points are listed from upstream to downstream
+		-- along the vehicle drive direction.
+		-- One path includes at least two points.
+		alertRadius Radius,
+		-- The biggest distance away from the alert path
+		-- within which the warning is active.
+		...
 	}
 	
 	

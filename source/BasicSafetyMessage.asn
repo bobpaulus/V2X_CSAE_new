@@ -1,7 +1,26 @@
 BasicSafetyMessage DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 EXPORTS BasicSafetyMessage;
 	BasicSafetyMessage::=SEQUENCE{
-		
+		msgCnt MsgCoutn,
+		id OCTET STRING(SIZE(8)),
+		--vehicle ID
+		plateNo OCTET STRING(SIZE(4..16)) OPTIONAL,
+		--Reserved for Electronic Vehicle Identifacation
+		secMark DSecond,
+		pos Position3D,
+		accuracy PositionConfidenceSet,
+		transmission TransmissionState,
+		speed Speed,
+		heading Heading,
+		angle SteeringWheelAngle OPTIONAL,
+		motionCfd MotionConfidenceSet OPTIONAL,
+		accelSet AccelerationSet4Way,
+		brakes BrakeSystemStatus,
+		size VehicleSize,
+		vehicleClass VehicleClassification,
+		--VehicleClassification includes BasicVehicleClass and other extendible type
+		safetyExt VehicleSafetyExtensions OPTIONAL,
+		...
 	}
 	
 END

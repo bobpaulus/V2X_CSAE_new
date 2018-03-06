@@ -3,7 +3,12 @@ SPAT DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 EXPORTS SPAT;
 IMPORTS ;
 	SPAT ::=SEQUENCE{
-		
+		msgCnt MsgCount,
+		timeStamp MinuteOfTheYear OPTIONAL, name DescriptiveName OPTIONAL,
+		-- human readable name for this collection 
+		-- to be used only in debug mode
+		intersections IntersectionStateList,
+		--set of SPAT data(one per intersection)
 	}
 	
 	

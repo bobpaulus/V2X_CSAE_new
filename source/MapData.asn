@@ -3,7 +3,11 @@ MapData DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 EXPORTS MapData;
 IMPORTS ;
 	MapData ::=SEQUENCE{
-		
+		msgCnt MsgCount,
+		timeStamp MinuteOfTheYear OPTIONAL,
+		nodes NodeList,
+		--intersections or road endpoints
+		...
 	}
 	
 	
