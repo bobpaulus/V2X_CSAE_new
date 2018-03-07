@@ -80,7 +80,7 @@ EXPORTS Acceleration,
 		VertOffset-B11,
 		VertOffset-B12,
 		YawRate;
-IMPORTS ;
+
 	Acceleration ::= INTEGER (-2000..2001)
 	-- LSB units are 0.01 m/s^2
 	-- the value 2000 shall be used for values greater than 2000 

@@ -13,6 +13,7 @@ IntersectionStateList, IntersectionStateList FROM DataFrame;
 		-- to be used only in debug mode
 		intersections IntersectionStateList,
 		--set of SPAT data(one per intersection)
+		...
 	}
 	
 	

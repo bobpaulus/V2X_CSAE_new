@@ -278,6 +278,7 @@ IMPORTS Acceleration,Acceleration FROM DataElements
 		-- Define movements at intersection
 		lanes LaneList,
 		-- Lanes belong to this link
+		...
 	}
 	
 	LinkList ::= SEQUENCE (SIZE(1..32)) OF Link
@@ -324,7 +325,7 @@ IMPORTS Acceleration,Acceleration FROM DataElements
 		-- a globally unique regional assignment value
 		-- typical assigned to a regional DOT authority
 		-- the value zero shall be used for testing needs
-		id NodeID,
+		id NodeID
 		-- a unique mapping to the node
 		-- in question within the above region of use
 	}
@@ -371,6 +372,7 @@ IMPORTS Acceleration,Acceleration FROM DataElements
 		-- The accuracy of this value
 		heading CoarseHeading OPTIONAL,
 		-- overall heading
+		...
 	}
 	
 	PathHistoryPointList ::= SEQUENCE (SIZE(1..23)) OF PathHistoryPoint
@@ -393,7 +395,7 @@ IMPORTS Acceleration,Acceleration FROM DataElements
 	-- of lanes (and their descriptions)
 	-- which this MovementState data applies to
 	-- see comments in the Remarks for usage details
-	phaseStates PhaseStateList,
+	phaseStates PhaseStateList
 	-- Consisting of sets of movement data with:
 	-- a) SignalPhaseState
 	-- b) TimeChangeDetails, and
@@ -538,7 +540,7 @@ IMPORTS Acceleration,Acceleration FROM DataElements
 		timeStamp DSecond OPTIONAL,
 		-- the mSec point in the current UTC minute that
 		-- this message was constructed
-		phases PhaseList,
+		phases PhaseList
 		-- Each Movement is given in turn
 		-- and contains its signal phase state,
 		-- mapping to the lanes it applies to, and
